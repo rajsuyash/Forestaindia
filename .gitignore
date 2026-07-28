@@ -1,26 +1,29 @@
-# Secrets — NEVER commit
+# ─── Secrets — NEVER commit ───
 .env
 .env.local
+.env.production
 .env.*.local
 *.pem
 *.key
 secrets.php
+public/secrets.php
 
-# Build output
+# ─── Build output ───
 dist/
 .astro/
 
-# Dependencies
+# ─── Dependencies ───
 node_modules/
 .pnpm-store/
 
-# OS / editor
+# ─── OS / editor ───
 .DS_Store
 Thumbs.db
-.vscode/
 .idea/
 
-# Logs
+# ─── Logs ───
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 pnpm-debug.log*

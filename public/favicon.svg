@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Foresta India">
+  <rect width="64" height="64" rx="14" fill="#0E2620"/>
+  <!-- leaf: lime crescent, echoes the Foresta wordmark mark -->
+  <path d="M11 46C20 27 36 15 55 13c-2 20-16 33-35 36-3 .5-6 .5-9-3Z" fill="#B8DC3C"/>
+  <path d="M13.5 45.5C24 34 38 24 53 16" stroke="#0E2620" stroke-width="3" stroke-linecap="round" fill="none" opacity=".85"/>
+</svg>

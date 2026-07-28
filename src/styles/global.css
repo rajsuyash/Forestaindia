@@ -1,0 +1,142 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+/* ══════════════════════════════════════════════════════════════════════
+   Foresta India — design tokens
+   HSL values ported verbatim from officialforesta.com so the India site
+   sits in the same visual system as the parent brand.
+   The one addition is --color-lime, sampled from the Foresta wordmark leaf.
+   ══════════════════════════════════════════════════════════════════════ */
+@theme {
+  --color-background: hsl(160 45% 10%);
+  --color-foreground: hsl(100 10% 95%);
+
+  --color-card: hsl(160 40% 12%);
+  --color-card-foreground: hsl(100 10% 95%);
+
+  --color-primary: hsl(148 45% 50%);
+  --color-primary-foreground: hsl(160 45% 8%);
+
+  --color-secondary: hsl(150 20% 25%);
+  --color-secondary-foreground: hsl(100 10% 90%);
+
+  --color-muted: hsl(160 30% 16%);
+  --color-muted-foreground: hsl(140 10% 60%);
+
+  --color-accent: hsl(148 30% 65%);
+  --color-accent-foreground: hsl(160 45% 8%);
+
+  --color-border: hsl(150 20% 20%);
+  --color-input: hsl(150 20% 20%);
+  --color-ring: hsl(148 45% 50%);
+
+  /* brand extensions */
+  --color-forest-deep: hsl(162 50% 11%);
+  --color-forest-dark: hsl(158 55% 14%);
+  --color-moss: hsl(148 45% 50%);
+  --color-sage: hsl(140 30% 70%);
+  --color-cream: hsl(100 15% 96%);
+  --color-glass: hsl(160 40% 15%);
+  --color-glass-border: hsl(150 25% 25%);
+  --color-glow: hsl(148 60% 45%);
+  --color-lime: #b8dc3c;
+
+  --color-destructive: hsl(0 84% 60%);
+  --color-success: hsl(148 55% 45%);
+
+  --radius: 0.75rem;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Visible keyboard focus everywhere. Never remove without a replacement. */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-moss);
+    color: var(--color-primary-foreground);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Frosted panel used for nav, cards and stat tiles — mirrors the parent site. */
+  .glass {
+    background: color-mix(in srgb, var(--color-glass) 65%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-glass-border) 70%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .container-page {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Small-caps section label, e.g. "MORE THAN JUST A CLIMATE TECH UNIT" */
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+}
+
+/* ── Scroll reveal ───────────────────────────────────────────────────────
+   Progressive enhancement: elements are visible by default, and only
+   become animatable once JS adds .reveal-ready to <html>. That way a
+   JS failure can never leave the page blank.
+   ──────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s var(--ease-out-soft),
+      transform 0.7s var(--ease-out-soft);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-ready [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
