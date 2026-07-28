@@ -6,7 +6,9 @@
  */
 
 return [
-    'smtp_host'  => 'smtp.hostinger.com',
+    // GoDaddy hosts this domain's mail, not Hostinger. Sending via Hostinger
+    // would fail the domain's SPF record and hit DMARC p=quarantine.
+    'smtp_host'  => 'smtpout.secureserver.net',
     'smtp_port'  => 465,
     'smtp_user'  => 'niravm@forestaindia.com',
     'smtp_pass'  => '',

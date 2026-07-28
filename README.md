@@ -63,9 +63,13 @@ Pushing to `main` also deploys via `.github/workflows/deploy.yml`, which needs t
 `HOSTINGER_SSH_KEY`, `HOSTINGER_SSH_HOST`, `HOSTINGER_SSH_USER`, `HOSTINGER_SSH_PORT`,
 `HOSTINGER_REMOTE_PATH`.
 
-DNS note: the domain is registered at GoDaddy while hosting is Hostinger, so `forestaindia.com` must
-have its A record pointed at the Hostinger site IP (or its nameservers moved) before the live smoke
-tests will pass.
+DNS: the domain is registered at GoDaddy while hosting is Hostinger, and **email is on GoDaddy
+too** (MX `secureserver.net`, SPF, DMARC `p=quarantine`). Point the A record at Hostinger and leave
+the mail records alone — full runbook in [`docs/DNS-GODADDY-TO-HOSTINGER.md`](docs/DNS-GODADDY-TO-HOSTINGER.md).
+
+Because mail is on GoDaddy, the enquiry form authenticates outbound through
+`smtpout.secureserver.net`. Sending via Hostinger SMTP or bare PHP `mail()` would fail the domain's
+SPF and hit its own DMARC quarantine policy, so leads would land in spam.
 
 ## Claims
 
