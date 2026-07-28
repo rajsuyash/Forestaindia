@@ -49,15 +49,26 @@ if [[ -f dist/secrets.php ]]; then
   exit 1
 fi
 
-# Password auth needs sshpass; key auth is preferred and needs nothing.
+# Key auth is preferred. Password auth falls back to sshpass.
 SSH_CMD=(ssh -p "$PORT" -o StrictHostKeyChecking=accept-new)
 RSYNC_PREFIX=()
-if [[ -n "${HOSTINGER_SSH_PASS:-}" ]]; then
+
+if [[ -n "${HOSTINGER_SSH_KEY:-}" ]]; then
+  KEY_PATH="${HOSTINGER_SSH_KEY/#\~/$HOME}"
+  if [[ ! -f "$KEY_PATH" ]]; then
+    echo "✗ HOSTINGER_SSH_KEY points at $KEY_PATH, which does not exist." >&2
+    exit 1
+  fi
+  SSH_CMD+=(-i "$KEY_PATH" -o IdentitiesOnly=yes)
+elif [[ -n "${HOSTINGER_SSH_PASS:-}" ]]; then
   if ! command -v sshpass >/dev/null 2>&1; then
     echo "✗ HOSTINGER_SSH_PASS is set but sshpass is not installed (brew install sshpass)." >&2
     exit 1
   fi
   RSYNC_PREFIX=(sshpass -p "$HOSTINGER_SSH_PASS")
+else
+  echo "✗ Set either HOSTINGER_SSH_KEY or HOSTINGER_SSH_PASS in .env." >&2
+  exit 1
 fi
 
 echo "→ Deploying dist/ to ${TARGET}:${HOSTINGER_REMOTE_PATH} (port ${PORT})"
@@ -66,14 +77,13 @@ echo "→ Deploying dist/ to ${TARGET}:${HOSTINGER_REMOTE_PATH} (port ${PORT})"
 # --delete keeps the remote a mirror of dist/, with three exceptions that must
 # survive a deploy: the credentials include, any PHPMailer vendor dir installed
 # on the server, and cPanel's own directories.
-"${RSYNC_PREFIX[@]}" rsync \
+${RSYNC_PREFIX[@]+"${RSYNC_PREFIX[@]}"} rsync \
   --archive --compress --human-readable --delete $DRY_RUN \
   --exclude 'secrets.php' \
   --exclude 'vendor/' \
   --exclude '.well-known/' \
   --exclude 'cgi-bin/' \
   --exclude '.htpasswd' \
-  --chmod=D755,F644 \
   -e "${SSH_CMD[*]}" \
   dist/ "${TARGET}:${HOSTINGER_REMOTE_PATH}/"
 
@@ -81,6 +91,17 @@ if [[ -n "$DRY_RUN" ]]; then
   echo "✓ Dry run complete."
   exit 0
 fi
+
+# macOS ships openrsync, which has no --chmod. Normalise permissions on the
+# server instead, so this works regardless of which rsync is local.
+echo "→ Normalising permissions"
+"${SSH_CMD[@]}" "$TARGET" "
+  cd '$HOSTINGER_REMOTE_PATH' || exit 1
+  find . -type d -exec chmod 755 {} +
+  find . -type f -exec chmod 644 {} +
+  [ -f secrets.php ] && chmod 600 secrets.php
+  exit 0
+"
 
 echo "→ Verifying live site"
 DOMAIN="${SITE_DOMAIN:-https://forestaindia.com}"
