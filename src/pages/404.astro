@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { nav } from '../../site.config';
+---
+
+<Base
+  title="Page not found"
+  description="The page you were looking for could not be found. Browse Foresta India's Living Forest systems, insights and contact details for India."
+  noindex
+>
+  <section class="container-page flex min-h-[60vh] items-center py-20">
+    <div class="mx-auto max-w-xl text-center">
+      <p class="eyebrow">404</p>
+      <h1 class="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+        This page has not taken root.
+      </h1>
+      <p class="mt-4 leading-relaxed text-muted-foreground">
+        The page you were looking for does not exist, or has moved. Here is everything else.
+      </p>
+
+      <nav aria-label="Site" class="mt-8 flex flex-wrap justify-center gap-2">
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              class="rounded-full border border-border/70 px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <a href="/" class="btn btn-primary mt-8">Back to home</a>
+    </div>
+  </section>
+</Base>

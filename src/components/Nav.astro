@@ -1,0 +1,158 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/foresta-logo.png';
+import { nav, company } from '../../site.config';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header
+  id="site-nav"
+  class="fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300"
+  data-scrolled="false"
+>
+  <div class="container-page">
+    <div class="flex h-[72px] items-center justify-between gap-4">
+      <a href="/" class="flex shrink-0 items-center gap-2.5" aria-label="Foresta India — home">
+        <Image
+          src={logo}
+          alt="Foresta"
+          width={132}
+          densities={[1, 2]}
+          loading="eager"
+          class="h-[26px] w-auto"
+        />
+        <span
+          class="border-l border-border/70 pl-2.5 text-[13px] font-medium tracking-[0.16em] text-accent uppercase"
+        >
+          India
+        </span>
+      </a>
+
+      <nav aria-label="Primary" class="hidden items-center gap-1 md:flex">
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'rounded-lg px-3.5 py-2 text-sm font-medium transition-colors',
+                isActive(item.href)
+                  ? 'text-primary'
+                  : 'text-foreground/75 hover:text-foreground hover:bg-white/5',
+              ]}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="/contact" class="btn btn-primary hidden !px-5 !py-2.5 sm:inline-flex">
+          Request a Deployment
+        </a>
+
+        <button
+          type="button"
+          id="nav-toggle"
+          class="grid h-10 w-10 place-items-center rounded-lg text-foreground hover:bg-white/5 md:hidden"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M4 7h16M4 12h16M4 17h16"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div
+    id="mobile-menu"
+    class="glass hidden border-t border-glass-border/50 md:hidden"
+    role="dialog"
+    aria-label="Menu"
+  >
+    <nav aria-label="Mobile" class="container-page flex flex-col gap-1 py-4">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'rounded-lg px-3 py-3 text-base font-medium transition-colors',
+              isActive(item.href)
+                ? 'bg-white/5 text-primary'
+                : 'text-foreground/85 hover:bg-white/5',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a href="/contact" class="btn btn-primary mt-2"> Request a Deployment </a>
+      <a
+        href={`tel:${company.phoneRaw}`}
+        class="px-3 py-2 text-center text-sm text-muted-foreground"
+      >
+        {company.phone}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- Nav is fixed; this reserves its height so page content starts below it. -->
+<div class="h-[72px]" aria-hidden="true"></div>
+
+<script>
+  const header = document.getElementById('site-nav')!;
+  const toggle = document.getElementById('nav-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+
+  // Solid-ish background only after scrolling, so the hero shows through at top.
+  const onScroll = () => {
+    header.dataset.scrolled = String(window.scrollY > 12);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    menu.classList.toggle('hidden', !open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+
+  toggle.addEventListener('click', () => {
+    setOpen(menu.classList.contains('hidden'));
+  });
+
+  // Escape closes the drawer and returns focus to the toggle.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  // Reset to desktop state if the viewport grows while the drawer is open.
+  window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => {
+    if (e.matches) setOpen(false);
+  });
+</script>
+
+<style>
+  #site-nav[data-scrolled='true'] {
+    background: color-mix(in srgb, var(--color-background) 82%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+</style>

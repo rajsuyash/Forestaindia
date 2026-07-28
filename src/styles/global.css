@@ -110,6 +110,45 @@
     }
   }
 
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 0.875rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    transition:
+      transform 0.2s var(--ease-out-soft),
+      background-color 0.2s,
+      border-color 0.2s;
+  }
+
+  .btn:hover {
+    transform: scale(1.03);
+  }
+
+  .btn:active {
+    transform: scale(1);
+  }
+
+  .btn-primary {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+
+  .btn-outline {
+    border: 1px solid color-mix(in srgb, var(--color-glass-border) 90%, transparent);
+    color: var(--color-foreground);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
+
   /* Small-caps section label, e.g. "MORE THAN JUST A CLIMATE TECH UNIT" */
   .eyebrow {
     font-size: 0.75rem;
@@ -118,6 +157,129 @@
     text-transform: uppercase;
     color: var(--color-accent);
   }
+}
+
+/* ── Article typography ──────────────────────────────────────────────────
+   Hand-rolled rather than @tailwindcss/typography: the prose plugin assumes
+   a light theme and we'd spend more CSS overriding it than writing this.
+   ──────────────────────────────────────────────────────────────────────── */
+.prose-foresta {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: color-mix(in srgb, var(--color-foreground) 88%, transparent);
+}
+
+.prose-foresta > * + * {
+  margin-top: 1.25rem;
+}
+
+.prose-foresta h2 {
+  margin-top: 2.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-foreground);
+}
+
+.prose-foresta h3 {
+  margin-top: 2rem;
+  font-size: 1.175rem;
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+.prose-foresta ul,
+.prose-foresta ol {
+  padding-left: 1.25rem;
+}
+
+.prose-foresta ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.prose-foresta ul > li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.prose-foresta ul > li + li {
+  margin-top: 0.5rem;
+}
+
+.prose-foresta ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0.35rem;
+  top: 0.75em;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+}
+
+.prose-foresta ol {
+  list-style: decimal;
+}
+
+.prose-foresta ol > li + li {
+  margin-top: 0.5rem;
+}
+
+.prose-foresta ol > li::marker {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.prose-foresta a {
+  color: var(--color-primary);
+  text-underline-offset: 3px;
+  text-decoration: underline;
+}
+
+.prose-foresta strong {
+  color: var(--color-foreground);
+  font-weight: 600;
+}
+
+.prose-foresta blockquote {
+  margin-block: 2rem;
+  border-left: 3px solid var(--color-primary);
+  padding: 0.25rem 0 0.25rem 1.5rem;
+  font-size: 1.175rem;
+  line-height: 1.6;
+  color: var(--color-foreground);
+}
+
+.prose-foresta table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.prose-foresta th,
+.prose-foresta td {
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+}
+
+.prose-foresta th {
+  background: color-mix(in srgb, var(--color-forest-deep) 60%, transparent);
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+/* Wide tables scroll inside their own box, never the page. */
+.prose-foresta :is(table) {
+  display: block;
+  overflow-x: auto;
+}
+
+.prose-foresta hr {
+  margin-block: 2.5rem;
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
 }
 
 /* ── Scroll reveal ───────────────────────────────────────────────────────

@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  body: string;
+  icon?: 'co2' | 'oxygen' | 'pollutant' | 'biomass';
+  delay?: number;
+}
+
+const { title, body, icon, delay = 0 } = Astro.props;
+
+const paths: Record<string, string> = {
+  co2: 'M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0m5 0h8',
+  oxygen: 'M12 3v18m0-18a5 5 0 0 1 5 5c0 3-5 5-5 5s-5-2-5-5a5 5 0 0 1 5-5',
+  pollutant: 'M4 8h16M4 13h10M4 18h6',
+  biomass: 'M12 21c0-6 3-10 8-12-1 7-4 10-8 12Zm0 0c0-6-3-10-8-12 1 7 4 10 8 12Z',
+};
+---
+
+<div class="glass rounded-[var(--radius)] p-6" data-reveal style={`--reveal-delay:${delay}ms`}>
+  {
+    icon && (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+        class="mb-4 text-primary"
+      >
+        <path
+          d={paths[icon]}
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    )
+  }
+  <h3 class="text-base font-semibold">{title}</h3>
+  <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+</div>

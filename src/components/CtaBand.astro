@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import ctaBg from '../assets/photos/cta-bg.jpg';
+
+interface Props {
+  heading?: string;
+  body?: string;
+  cta?: string;
+}
+
+const {
+  heading = "Let's Restore India's Air Together",
+  body = 'Whether you are a municipal corporation, developer, industrial group or investor, Foresta India offers a deployable system with measurable, reportable environmental impact.',
+  cta = 'Start a Conversation',
+} = Astro.props;
+---
+
+<section class="relative isolate overflow-hidden">
+  <Image
+    src={ctaBg}
+    alt=""
+    aria-hidden="true"
+    widths={[768, 1280, 1920]}
+    sizes="100vw"
+    class="absolute inset-0 -z-10 h-full w-full object-cover"
+  />
+  <div class="absolute inset-0 -z-10 bg-forest-deep/85"></div>
+
+  <div class="container-page py-20 text-center md:py-28">
+    <h2 class="mx-auto max-w-3xl text-3xl font-semibold tracking-tight md:text-5xl" data-reveal>
+      {heading}
+    </h2>
+    <p
+      class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-foreground/80 md:text-lg"
+      data-reveal
+      style="--reveal-delay:80ms"
+    >
+      {body}
+    </p>
+    <a href="/contact" class="btn btn-primary mt-9" data-reveal style="--reveal-delay:160ms">
+      {cta}
+    </a>
+  </div>
+</section>

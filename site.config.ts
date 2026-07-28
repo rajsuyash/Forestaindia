@@ -14,7 +14,7 @@ export const site = {
   url: 'https://forestaindia.com',
   tagline: "India's Plug-and-Play Living Forest",
   description:
-    'Foresta India deploys Living Forest systems that capture CO₂, cut PM2.5 and NOx, and generate oxygen — forest-equivalent impact in a compact footprint, for Indian cities, campuses and industry.',
+    'Living Forest systems that capture CO₂, cut PM2.5 and generate oxygen — forest-equivalent impact in a compact footprint, for Indian cities and industry.',
   locale: 'en_IN',
   lang: 'en-IN',
 } as const;

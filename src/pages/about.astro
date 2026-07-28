@@ -1,0 +1,180 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import MetricTile from '../components/MetricTile.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { company } from '../../site.config';
+
+const pressures = [
+  {
+    title: 'Urban Pressure',
+    body: 'Indian cities concentrate CO₂, particulate matter and heat. Fourteen of the world’s twenty most polluted cities are Indian, and the burden lands on health, productivity and resilience.',
+  },
+  {
+    title: 'Infrastructure Gaps',
+    body: 'Traditional forests need space, soil and decades of growth. In dense Indian urban cores, none of those three are available at the scale or speed required.',
+  },
+  {
+    title: 'Nature + Engineering',
+    body: 'Foresta bridges ecology and engineering to deliver forest-equivalent impact in compact, scalable systems that commission in days, not decades.',
+  },
+];
+
+const model = [
+  { n: '1', title: 'Capture', body: 'Atmospheric CO₂ and pollutants enter the system.' },
+  {
+    n: '2',
+    title: 'Transform',
+    body: 'Microalgae convert emissions into oxygen and biomass through accelerated photosynthesis.',
+  },
+  {
+    n: '3',
+    title: 'Regenerate',
+    body: 'Purified, oxygen-enriched air is released back into the environment.',
+  },
+  {
+    n: '4',
+    title: 'Reuse',
+    body: 'Biomass is harvested and used for renewable, recyclable and regenerative applications.',
+  },
+];
+---
+
+<Base
+  title="About"
+  description="Foresta India is the authorised distributor for Foresta Living Forest systems by EnerSynk Group — forest-equivalent air regeneration for Indian cities."
+>
+  <section class="container-page pt-20 pb-16 md:pt-28 md:pb-20">
+    <div class="max-w-3xl">
+      <p class="eyebrow">About Foresta India</p>
+      <h1 class="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
+        We believe air is infrastructure.
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+        Foresta was created to restore the Earth's air by bringing forest-equivalent regeneration
+        into the places where natural forests cannot grow. Born from climate infrastructure
+        expertise and driven by a regenerative mission, Foresta transforms emissions into oxygen,
+        biomass and measurable environmental value — embedding living ecosystems into the built
+        world.
+      </p>
+      <p class="mt-4 text-lg leading-relaxed text-muted-foreground">
+        {company.legalName} is the {company.role.toLowerCase()} for these systems, responsible for deployment,
+        commissioning, service and impact reporting across the Indian market.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Why India ────────────────────────────────────────────────────── -->
+  <section class="border-t border-border/50 bg-forest-deep/40 py-20 md:py-24">
+    <div class="container-page">
+      <SectionHeading
+        title="Why India Needs Living Forests"
+        body="Urbanisation is accelerating faster than ecosystems can expand. Pollution concentrates exactly where people live, work and build."
+      />
+
+      <div class="mt-12 grid gap-6 md:grid-cols-3">
+        {
+          pressures.map((item, i) => (
+            <div
+              class="glass rounded-[var(--radius)] p-6"
+              data-reveal
+              style={`--reveal-delay:${i * 80}ms`}
+            >
+              <h3 class="text-base font-semibold text-primary">{item.title}</h3>
+              <p class="mt-2.5 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Nature as infrastructure ─────────────────────────────────────── -->
+  <section class="container-page py-20 md:py-24">
+    <div class="mx-auto max-w-3xl text-center" data-reveal>
+      <h2 class="text-3xl font-semibold tracking-tight md:text-4xl">Nature as infrastructure</h2>
+      <p class="mt-5 leading-relaxed text-muted-foreground">
+        Foresta does not replace natural forests, and it is not a substitute for afforestation
+        programmes. We extend forest function into environments where nature alone cannot operate.
+        Our Living Forest systems act as engineered ecosystems — capturing emissions, regenerating
+        air and producing renewable biological value in measurable form.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Regenerative model ───────────────────────────────────────────── -->
+  <section class="border-t border-border/50 bg-forest-deep/40 py-20 md:py-24">
+    <div class="container-page">
+      <SectionHeading title="Our Regenerative Model" />
+
+      <ol class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          model.map((step, i) => (
+            <li
+              class="glass rounded-[var(--radius)] p-6"
+              data-reveal
+              style={`--reveal-delay:${i * 80}ms`}
+            >
+              <span class="grid h-9 w-9 place-items-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
+                {step.n}
+              </span>
+              <h3 class="mt-4 text-base font-semibold">{step.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── Measured impact ──────────────────────────────────────────────── -->
+  <section class="container-page py-20 md:py-24">
+    <SectionHeading title="Measured impact. Real regeneration." />
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <MetricTile
+        icon="co2"
+        title="CO₂ Capture Capacity"
+        body="Forest-equivalent absorption in a compact footprint."
+        delay={0}
+      />
+      <MetricTile
+        icon="oxygen"
+        title="Oxygen Production"
+        body="Continuous oxygen generation through photosynthesis."
+        delay={80}
+      />
+      <MetricTile
+        icon="pollutant"
+        title="Pollutant Reduction"
+        body="Reduction of NOx, SOx, VOCs and particulate matter."
+        delay={160}
+      />
+      <MetricTile
+        icon="biomass"
+        title="Biomass Production"
+        body="Harvestable algae biomass for circular applications."
+        delay={240}
+      />
+    </div>
+  </section>
+
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-border/50 bg-forest-deep/40 py-20 md:py-24">
+    <div class="container-page">
+      <div class="mx-auto max-w-3xl text-center" data-reveal>
+        <h2 class="text-3xl font-semibold tracking-tight md:text-4xl">
+          A new chapter for urban regeneration
+        </h2>
+        <p class="mt-5 leading-relaxed text-muted-foreground">
+          Foresta represents a shift in how cities breathe. Environmental regeneration becomes
+          infrastructure. Pollution becomes resource. Clean air becomes measurable capital. Together
+          with municipal bodies, industry and institutions, we are restoring balance through
+          scalable Living Forest systems across India.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

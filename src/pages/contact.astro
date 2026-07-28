@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.tsx';
+import { company, segments, deploymentScales, timelines, contactEndpoint } from '../../site.config';
+
+const addr = company.address;
+const hasAddress = !addr.line1.startsWith('TODO');
+---
+
+<Base
+  title="Contact"
+  description="Talk to Foresta India about deploying Living Forest systems — for municipalities, industry, developers, campuses and CSR teams across India."
+>
+  <section class="container-page pt-20 pb-20 md:pt-28 md:pb-28">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-5">
+        <p class="eyebrow">Contact</p>
+        <h1 class="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
+          Let's restore
+          <span class="block text-primary">India's air together.</span>
+        </h1>
+        <p class="mt-6 leading-relaxed text-muted-foreground">
+          If you are a municipal corporation, developer, industrial partner, institution or investor
+          interested in deploying Living Forest systems, we welcome the conversation.
+        </p>
+
+        <dl class="mt-10 space-y-6">
+          <div>
+            <dt class="text-sm font-semibold text-foreground">Email</dt>
+            <dd class="mt-1">
+              <a
+                href={`mailto:${company.email}`}
+                class="text-muted-foreground transition-colors hover:text-primary"
+              >
+                {company.email}
+              </a>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="text-sm font-semibold text-foreground">Phone</dt>
+            <dd class="mt-1">
+              <a
+                href={`tel:${company.phoneRaw}`}
+                class="text-muted-foreground transition-colors hover:text-primary"
+              >
+                {company.phone}
+              </a>
+            </dd>
+          </div>
+
+          {
+            hasAddress && (
+              <div>
+                <dt class="text-sm font-semibold text-foreground">Office</dt>
+                <dd class="mt-1 text-muted-foreground">
+                  <address class="not-italic leading-relaxed">
+                    {addr.line1}
+                    <br />
+                    {addr.line2}
+                    <br />
+                    {addr.city}, {addr.state} {addr.postalCode}
+                  </address>
+                </dd>
+              </div>
+            )
+          }
+
+          <div>
+            <dt class="text-sm font-semibold text-foreground">Hours</dt>
+            <dd class="mt-1 text-muted-foreground">{company.hours}</dd>
+          </div>
+
+          <div>
+            <dt class="text-sm font-semibold text-foreground">Coverage</dt>
+            <dd class="mt-1 text-muted-foreground">{company.serviceArea}</dd>
+          </div>
+        </dl>
+
+        <div class="mt-10 rounded-[var(--radius)] border border-border/60 p-5">
+          <p class="text-sm font-semibold text-foreground">{company.legalName}</p>
+          <p class="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+            {company.role} — {company.principal}
+          </p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7">
+        <ContactForm
+          client:load
+          endpoint={contactEndpoint}
+          segments={segments}
+          scales={deploymentScales}
+          timelines={timelines}
+        />
+      </div>
+    </div>
+  </section>
+</Base>

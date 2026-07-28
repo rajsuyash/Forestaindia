@@ -1,0 +1,46 @@
+---
+import { comparison } from '../data/systems';
+---
+
+<div data-reveal>
+  <!-- Table scrolls inside its own container so the page body never scrolls sideways. -->
+  <div
+    class="overflow-x-auto rounded-[var(--radius)] border border-border/60"
+    tabindex="0"
+    role="region"
+    aria-label="Comparison of Foresta Living Forest systems, scrollable"
+  >
+    <table class="w-full min-w-[640px] border-collapse text-left text-sm">
+      <caption class="sr-only">
+        Side-by-side capabilities across all three Foresta deployment scales.
+      </caption>
+      <thead>
+        <tr class="bg-forest-deep/60">
+          <th scope="col" class="px-5 py-4 font-semibold text-muted-foreground">Specification</th>
+          {
+            comparison.columns.map((col) => (
+              <th scope="col" class="px-5 py-4 font-semibold text-foreground">
+                {col}
+              </th>
+            ))
+          }
+        </tr>
+      </thead>
+      <tbody>
+        {
+          comparison.rows.map((row, i) => (
+            <tr class:list={['border-t border-border/50', i % 2 === 1 && 'bg-white/[0.02]']}>
+              <th scope="row" class="px-5 py-3.5 font-medium text-muted-foreground">
+                {row.label}
+              </th>
+              {row.values.map((value) => (
+                <td class="px-5 py-3.5 text-foreground/90">{value}</td>
+              ))}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="mt-3 text-xs text-muted-foreground md:hidden">Scroll the table sideways to compare.</p>
+</div>

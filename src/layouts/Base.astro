@@ -1,0 +1,131 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site, company } from '../../site.config';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute or root-relative image for OG/Twitter cards. */
+  image?: string;
+  /** Set on article pages so we can emit Article JSON-LD. */
+  article?: { publishedAt: string; category: string };
+  noindex?: boolean;
+}
+
+const { title, description, image = '/og-default.png', article, noindex = false } = Astro.props;
+
+const canonical =
+  new URL(Astro.url.pathname, Astro.site ?? site.url).href.replace(/\/$/, '') || site.url;
+const ogImage = new URL(image, Astro.site ?? site.url).href;
+const fullTitle = title === site.name ? title : `${title} — ${site.name}`;
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  legalName: company.legalName,
+  url: site.url,
+  logo: new URL('/icon-512.png', site.url).href,
+  description: site.description,
+  email: company.email,
+  telephone: company.phoneRaw,
+  areaServed: 'IN',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: company.address.city,
+    addressRegion: company.address.state,
+    addressCountry: 'IN',
+  },
+};
+
+const articleSchema = article && {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  image: ogImage,
+  datePublished: article.publishedAt,
+  articleSection: article.category,
+  author: { '@type': 'Organization', name: site.name },
+  publisher: { '@type': 'Organization', name: site.name },
+  mainEntityOfPage: canonical,
+};
+---
+
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0E2721" />
+
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="generator" content={Astro.generator} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    {
+      articleSchema && (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+      )
+    }
+  </head>
+
+  <body class="min-h-screen bg-background text-foreground">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:font-medium focus:text-primary-foreground"
+    >
+      Skip to content
+    </a>
+
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Scroll reveal. Adds .reveal-ready first so a JS failure leaves
+      // content visible rather than permanently transparent.
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const targets = document.querySelectorAll('[data-reveal]');
+
+      if (!reduced && targets.length && 'IntersectionObserver' in window) {
+        document.documentElement.classList.add('reveal-ready');
+
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+        );
+
+        targets.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

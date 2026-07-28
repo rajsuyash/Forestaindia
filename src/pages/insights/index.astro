@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+
+import Base from '../../layouts/Base.astro';
+import InsightCard from '../../components/InsightCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+const entries = (await getCollection('insights')).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()
+);
+---
+
+<Base
+  title="Insights"
+  description="Perspectives on India's air quality infrastructure — NCAP, CSR under Section 135, BRSR, Smart Cities and microalgae carbon capture."
+>
+  <section class="container-page pt-20 pb-14 md:pt-28 md:pb-16">
+    <div class="max-w-3xl">
+      <p class="eyebrow">Insights</p>
+      <h1 class="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
+        Insights &amp; <span class="text-primary">regenerative thinking</span>
+      </h1>
+      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+        Perspectives on climate infrastructure, carbon capture systems, urban air purification and
+        circular bioeconomy innovation — written for the Indian policy, municipal and industrial
+        context.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/product" class="btn btn-primary">Explore Our Systems</a>
+        <a href="/contact" class="btn btn-outline">Contact Foresta India</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page pb-20 md:pb-28">
+    <h2 class="sr-only">All articles</h2>
+    {
+      entries.length === 0 ? (
+        <p class="text-muted-foreground">Articles are on the way.</p>
+      ) : (
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {entries.map((entry, i) => (
+            <InsightCard entry={entry} delay={(i % 3) * 90} showExcerpt />
+          ))}
+        </div>
+      )
+    }
+  </section>
+
+  <CtaBand />
+</Base>

@@ -1,0 +1,99 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+import Base from '../../layouts/Base.astro';
+import InsightCard from '../../components/InsightCard.astro';
+import KeyInsight from '../../components/KeyInsight.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('insights');
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, category, excerpt, hero, publishedAt, metaDescription } = entry.data;
+
+const related = (await getCollection('insights'))
+  .filter((e) => e.id !== entry.id)
+  .sort((a, b) => {
+    // Same category first, then most recent.
+    const sameA = a.data.category === category ? 0 : 1;
+    const sameB = b.data.category === category ? 0 : 1;
+    if (sameA !== sameB) return sameA - sameB;
+    return b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf();
+  })
+  .slice(0, 3);
+
+const formattedDate = publishedAt.toLocaleDateString('en-IN', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<Base
+  title={title}
+  description={metaDescription ?? excerpt}
+  article={{ publishedAt: publishedAt.toISOString(), category }}
+>
+  <article>
+    <header class="container-page pt-16 pb-10 md:pt-24">
+      <div class="mx-auto max-w-3xl">
+        <nav aria-label="Breadcrumb" class="text-sm">
+          <a href="/insights" class="text-muted-foreground transition-colors hover:text-primary">
+            ← All insights
+          </a>
+        </nav>
+
+        <p class="eyebrow mt-8">{category}</p>
+        <h1 class="mt-3 text-3xl leading-tight font-semibold tracking-tight md:text-4xl">
+          {title}
+        </h1>
+        <p class="mt-5 text-lg leading-relaxed text-muted-foreground">{excerpt}</p>
+        <p class="mt-5 text-sm text-muted-foreground">
+          <time datetime={publishedAt.toISOString()}>{formattedDate}</time>
+        </p>
+      </div>
+    </header>
+
+    <div class="container-page">
+      <div class="mx-auto max-w-4xl overflow-hidden rounded-[var(--radius)]">
+        <Image
+          src={hero}
+          alt=""
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 1024px) 56rem, 92vw"
+          loading="eager"
+          class="h-full w-full object-cover"
+        />
+      </div>
+    </div>
+
+    <div class="container-page py-14 md:py-16">
+      <div class="prose-foresta mx-auto max-w-3xl">
+        <Content components={{ KeyInsight }} />
+      </div>
+    </div>
+  </article>
+
+  {
+    related.length > 0 && (
+      <section class="border-t border-border/50 bg-forest-deep/40 py-16 md:py-20">
+        <div class="container-page">
+          <h2 class="text-2xl font-semibold tracking-tight">Continue reading</h2>
+          <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map((item, i) => (
+              <InsightCard entry={item} delay={i * 90} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand />
+</Base>

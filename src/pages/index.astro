@@ -1,17 +1,385 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 
+import Base from '../layouts/Base.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import SystemCard from '../components/SystemCard.astro';
+import MetricTile from '../components/MetricTile.astro';
+import InsightCard from '../components/InsightCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+import { systems } from '../data/systems';
+import { site } from '../../site.config';
+
+import heroForest from '../assets/photos/hero-forest.jpg';
+import announcement from '../assets/photos/announcement.jpeg';
+
+const insights = (await getCollection('insights'))
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+  .slice(0, 3);
+
+const steps = [
+  { n: '1', title: 'Air Intake', body: 'Surrounding air is drawn into the system.' },
+  { n: '2', title: 'CO₂ Absorbed', body: 'Microalgae capture carbon dioxide naturally.' },
+  { n: '3', title: 'Oxygen Released', body: 'Fresh oxygen flows back into the air.' },
+  { n: '4', title: 'Biomass Created', body: 'Captured carbon becomes renewable biomass.' },
+];
+
+const outcomes = [
+  'Lower PM2.5 and PM10 exposure',
+  'Reduced respiratory illness',
+  'Improved cognitive function',
+  'Higher workplace productivity',
+  'Urban heat reduction',
+  'Lower healthcare costs',
+  'Auditable BRSR and ESG performance',
+  'Increased property and district value',
+];
+
+const circular = [
+  { title: 'Biofuel', body: 'Algae-derived renewable energy replacing fossil inputs.' },
+  { title: 'Fertiliser', body: 'Organic nutrients restoring agricultural soil health.' },
+  { title: 'Soil Regeneration', body: 'Reviving degraded land with living organic matter.' },
+  {
+    title: 'Spirulina & Edible Algae',
+    body: 'High-protein biomass for nutrition and supplements.',
+  },
+  { title: 'Bioplastics', body: 'Biodegradable materials from captured carbon polymers.' },
+  {
+    title: 'Industrial Raw Materials',
+    body: 'Feedstock for chemicals, pigments and bio-composites.',
+  },
+];
+
+const keys = [
+  {
+    title: 'Restoration',
+    body: 'We reduce CO₂ and particulate pollution to help ecosystems and communities regain balance.',
+  },
+  {
+    title: 'Recycling',
+    body: 'Captured carbon becomes biomass — reused for renewable and recyclable applications.',
+  },
+  {
+    title: 'Sustainability',
+    body: 'Measurable impact over time, designed for long-term environmental and financial value.',
+  },
+];
+
+const heroStats: [string, string][] = [
+  ['700–800', 'Trees per CTRX unit'],
+  ['87–89%', 'Carbon removal efficiency'],
+  ['14.4 m²', 'Footprint of one CTRX'],
+  ['2–3 days', 'Biomass harvest cycle'],
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base title={site.name} description={site.description}>
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="relative isolate -mt-[72px] flex min-h-[92vh] items-center overflow-hidden">
+    <Image
+      src={heroForest}
+      alt=""
+      aria-hidden="true"
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 -z-10 h-full w-full object-cover"
+    />
+    <div
+      class="absolute inset-0 -z-10 bg-gradient-to-b from-forest-deep/92 via-forest-deep/80 to-background"
+    >
+    </div>
+
+    <div class="container-page pt-28 pb-20">
+      <div class="max-w-4xl">
+        <p class="eyebrow">More than just a climate tech unit</p>
+        <h1
+          class="mt-5 text-4xl leading-[1.08] font-semibold tracking-tight sm:text-5xl lg:text-6xl"
+        >
+          India's first plug-and-play
+          <span class="block text-primary">Living Forest.</span>
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-foreground/85">
+          Equivalent to up to 700 mature trees — in a compact, deployable unit. Foresta captures
+          CO₂, strips out PM2.5 and NOx, and returns clean oxygen, in the dense Indian cities and
+          industrial zones where planting a forest is not an option.
+        </p>
+
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href="/product" class="btn btn-primary">Explore the System</a>
+          <a href="/contact" class="btn btn-outline">Request Deployment Information</a>
+        </div>
+
+        <dl class="mt-14 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4">
+          {
+            heroStats.map(([value, label]) => (
+              <div>
+                <dt class="sr-only">{label}</dt>
+                <dd>
+                  <span class="block text-2xl font-semibold text-primary">{value}</span>
+                  <span class="mt-1 block text-xs leading-snug text-muted-foreground">{label}</span>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Announcement ─────────────────────────────────────────────────── -->
+  <section class="container-page py-20 md:py-28">
+    <div class="grid items-center gap-10 md:grid-cols-2 md:gap-14">
+      <div class="overflow-hidden rounded-[var(--radius)]" data-reveal>
+        <Image
+          src={announcement}
+          alt="Foresta — the world's first deployable Living Forest"
+          widths={[560, 900]}
+          sizes="(min-width: 768px) 45vw, 90vw"
+          class="h-full w-full object-cover"
+        />
+      </div>
+
+      <div data-reveal style="--reveal-delay:80ms">
+        <p class="eyebrow">Latest announcement</p>
+        <h2 class="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
+          Foresta reaches 90+ million people globally
+        </h2>
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          Foresta is now featured across 160+ media outlets worldwide, reaching over 90 million
+          people. It is validation that the world is ready for deployable, scalable carbon
+          infrastructure — not just concepts, but real climate solutions.
+        </p>
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          Foresta India brings that same system to the Indian market as the authorised distribution
+          partner, with deployment, commissioning and service handled locally.
+        </p>
+        <a
+          href="/about"
+          class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-primary"
+        >
+          Learn more about Foresta
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M5 12h14m-6-6 6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Systems ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-border/50 bg-forest-deep/40 py-20 md:py-28">
+    <div class="container-page">
+      <SectionHeading
+        title="Our Living Forest Systems"
+        body="Designed for different scales of impact — modular, scalable solutions for Indian urban, institutional and industrial environments."
+      />
+
+      <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {systems.map((system, i) => <SystemCard system={system} delay={i * 90} />)}
+      </div>
+
+      <div class="mt-12 flex flex-wrap justify-center gap-3" data-reveal>
+        <a href="/product" class="btn btn-primary">Explore Our Systems</a>
+        <a href="/contact" class="btn btn-outline">Request Deployment Strategy</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How they work ────────────────────────────────────────────────── -->
+  <section class="container-page py-20 md:py-28">
+    <SectionHeading
+      title="How They Work"
+      body="A Living Forest works like a natural forest, only in compact form. It draws in surrounding air, absorbs CO₂ and releases oxygen, while reducing pollutants."
+    />
+
+    <ol class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        steps.map((step, i) => (
+          <li
+            class="glass relative rounded-[var(--radius)] p-6"
+            data-reveal
+            style={`--reveal-delay:${i * 80}ms`}
+          >
+            <span class="grid h-9 w-9 place-items-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
+              {step.n}
+            </span>
+            <h3 class="mt-4 text-base font-semibold">{step.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- ── Impact ───────────────────────────────────────────────────────── -->
+  <section class="border-t border-border/50 bg-forest-deep/40 py-20 md:py-28">
+    <div class="container-page">
+      <SectionHeading
+        eyebrow="From clean air to circular value"
+        title="Cleaner air. Balanced CO₂. Oxygen restored."
+      />
+
+      <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <MetricTile
+          icon="co2"
+          title="CO₂ Capture"
+          body="Measurable carbon absorption, reported per unit and per site."
+          delay={0}
+        />
+        <MetricTile
+          icon="pollutant"
+          title="Pollutant Reduction"
+          body="NOx, SOx, VOCs and fine particulate matter — the pollutants that drive Indian AQI."
+          delay={80}
+        />
+        <MetricTile
+          icon="oxygen"
+          title="Oxygen Generation"
+          body="Continuous oxygen release, 24 hours a day."
+          delay={160}
+        />
+        <MetricTile
+          icon="biomass"
+          title="Biomass Production"
+          body="Harvestable algae biomass for circular, revenue-generating applications."
+          delay={240}
+        />
+      </div>
+
+      <div class="mt-16 grid gap-10 md:grid-cols-2 md:gap-14">
+        <div data-reveal>
+          <h3 class="text-2xl font-semibold tracking-tight">Cleaner air reshapes cities.</h3>
+          <ul class="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+            {
+              outcomes.map((item) => (
+                <li class="flex items-start gap-2.5 text-sm text-muted-foreground">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                    class="mt-0.5 shrink-0 text-primary"
+                  >
+                    <path
+                      d="m5 13 4 4L19 7"
+                      stroke="currentColor"
+                      stroke-width="2.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div data-reveal style="--reveal-delay:100ms">
+          <h3 class="text-2xl font-semibold tracking-tight">
+            Captured carbon becomes a renewable resource.
+          </h3>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2">
+            {
+              circular.map((item) => (
+                <div class="rounded-lg border border-border/60 p-4">
+                  <h4 class="text-sm font-semibold">{item.title}</h4>
+                  <p class="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Mission / Vision ─────────────────────────────────────────────── -->
+  <section class="container-page py-20 md:py-28">
+    <div class="grid gap-8 md:grid-cols-2">
+      <div class="glass rounded-[var(--radius)] p-8 md:p-10" data-reveal>
+        <p class="eyebrow">Mission</p>
+        <h2 class="mt-3 text-2xl font-semibold tracking-tight">
+          Restoring balance through nature.
+        </h2>
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          Foresta builds deployable Living Forest systems that purify air, capture CO₂, generate
+          oxygen and create renewable biomass — measurable impact in a compact footprint.
+        </p>
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          Every system deployed brings India closer to cleaner, healthier cities.
+        </p>
+      </div>
+
+      <div
+        class="glass rounded-[var(--radius)] p-8 md:p-10"
+        data-reveal
+        style="--reveal-delay:100ms"
+      >
+        <p class="eyebrow">Vision</p>
+        <h2 class="mt-3 text-2xl font-semibold tracking-tight">A living forest for every city.</h2>
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          A country where clean air is accessible everywhere — cities, industry and communities
+          supported by scalable nature-based technology.
+        </p>
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          From single units to city-wide networks — scaling nature's power.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-16">
+      <SectionHeading title="Our Three Keys" />
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        {
+          keys.map((key, i) => (
+            <div
+              class="rounded-[var(--radius)] border border-border/60 p-6"
+              data-reveal
+              style={`--reveal-delay:${i * 80}ms`}
+            >
+              <h3 class="text-base font-semibold text-primary">{key.title}</h3>
+              <p class="mt-2.5 text-sm leading-relaxed text-muted-foreground">{key.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Insights ─────────────────────────────────────────────────────── -->
+  {
+    insights.length > 0 && (
+      <section class="border-t border-border/50 bg-forest-deep/40 py-20 md:py-28">
+        <div class="container-page">
+          <SectionHeading
+            title="From Our Insights"
+            body="Climate infrastructure, measurable carbon capture and regenerative systems — written for the Indian policy and industrial context."
+          />
+          <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {insights.map((entry, i) => (
+              <InsightCard entry={entry} delay={i * 90} />
+            ))}
+          </div>
+          <div class="mt-12 text-center" data-reveal>
+            <a href="/insights" class="btn btn-outline">
+              View All Insights
+            </a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand />
+</Base>

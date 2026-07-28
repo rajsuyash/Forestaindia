@@ -13,9 +13,10 @@
     "check": "astro check",
     "format": "prettier --write \"**/*.{astro,ts,tsx,js,mjs,css,md,mdx,json}\"",
     "format:check": "prettier --check \"**/*.{astro,ts,tsx,js,mjs,css,md,mdx,json}\"",
-    "verify": "pnpm check && pnpm build && node scripts/check.mjs",
+    "verify": "pnpm check && pnpm test && pnpm build && node scripts/check.mjs",
     "deploy": "pnpm verify && bash scripts/deploy.sh",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "node --experimental-strip-types scripts/test-enquiry.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.4",

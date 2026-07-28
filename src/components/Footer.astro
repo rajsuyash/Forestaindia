@@ -1,0 +1,116 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/foresta-logo.png';
+import { nav, company, site } from '../../site.config';
+
+const year = new Date().getFullYear();
+const addr = company.address;
+const hasAddress = !addr.line1.startsWith('TODO');
+---
+
+<footer class="border-t border-border/60 bg-forest-deep">
+  <div class="container-page py-14 md:py-16">
+    <div class="grid gap-10 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-5">
+        <div class="flex items-center gap-2.5">
+          <Image src={logo} alt="Foresta" width={124} densities={[1, 2]} class="h-[24px] w-auto" />
+          <span
+            class="border-l border-border/70 pl-2.5 text-[12px] font-medium tracking-[0.16em] text-accent uppercase"
+          >
+            India
+          </span>
+        </div>
+
+        <p class="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
+          Deployable Living Forest systems for Indian cities, campuses and industry — capturing CO₂,
+          cutting particulate pollution and generating oxygen in a compact footprint.
+        </p>
+
+        <p class="mt-5 text-sm text-foreground/80">
+          {company.role} · <span class="text-muted-foreground">{company.principal}</span>
+        </p>
+        <p class="mt-1 text-sm text-muted-foreground">{company.legalName}</p>
+      </div>
+
+      <div class="md:col-span-3">
+        <h2 class="text-sm font-semibold text-foreground">Navigate</h2>
+        <ul class="mt-4 space-y-2.5">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="md:col-span-4">
+        <h2 class="text-sm font-semibold text-foreground">Connect</h2>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li>
+            <a
+              href={`mailto:${company.email}`}
+              class="text-muted-foreground transition-colors hover:text-primary"
+            >
+              {company.email}
+            </a>
+          </li>
+          <li>
+            <a
+              href={`tel:${company.phoneRaw}`}
+              class="text-muted-foreground transition-colors hover:text-primary"
+            >
+              {company.phone}
+            </a>
+          </li>
+          {
+            hasAddress && (
+              <li class="text-muted-foreground">
+                <address class="not-italic leading-relaxed">
+                  {addr.line1}
+                  <br />
+                  {addr.line2}
+                  <br />
+                  {addr.city}, {addr.state} {addr.postalCode}
+                </address>
+              </li>
+            )
+          }
+          <li class="text-muted-foreground">{company.hours}</li>
+          <li class="text-muted-foreground">Serving {company.serviceArea}</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="mt-12 text-lg font-light text-accent">Together to restore the Earth.</p>
+
+    <div
+      class="mt-8 flex flex-col gap-3 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>
+        © {year}
+        {company.legalName}. {site.name} is a trade name of the {company.role.toLowerCase()}.
+      </p>
+      {
+        (company.cin || company.gstin) && (
+          <p class="flex gap-4">
+            {company.cin && <span>CIN: {company.cin}</span>}
+            {company.gstin && <span>GSTIN: {company.gstin}</span>}
+          </p>
+        )
+      }
+    </div>
+
+    <p class="mt-4 text-xs leading-relaxed text-muted-foreground/70">
+      Foresta™ and the Foresta Living Forest systems are products of EnerSynk Group. Performance
+      figures are manufacturer specifications and vary with siting, climate and operating
+      conditions; site-specific projections are provided at survey stage.
+    </p>
+  </div>
+</footer>
