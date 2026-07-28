@@ -16,12 +16,13 @@ const { system, delay = 0 } = Astro.props;
   data-reveal
   style={`--reveal-delay:${delay}ms`}
 >
-  <div class="relative aspect-4/3 overflow-hidden bg-forest-deep">
+  <div class="product-stage relative aspect-4/3 overflow-hidden">
     <Image
       src={system.image}
       alt={`Foresta ${system.name} unit`}
       widths={[400, 640, 900]}
       sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+      fit="contain"
       class="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
     />
   </div>

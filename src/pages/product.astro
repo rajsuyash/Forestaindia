@@ -37,7 +37,7 @@ const specGroups = [
       class="absolute inset-0 -z-10 h-full w-full object-cover"
     />
     <div
-      class="absolute inset-0 -z-10 bg-gradient-to-b from-forest-deep/92 via-forest-deep/82 to-background"
+      class="absolute inset-0 -z-10 bg-gradient-to-b from-forest-deep/75 via-forest-deep/70 to-background"
     >
     </div>
 
@@ -82,12 +82,13 @@ const specGroups = [
         <div class="container-page">
           <div class="grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
             <div class="lg:col-span-5" data-reveal>
-              <div class="glass overflow-hidden rounded-[var(--radius)] bg-forest-deep/60">
+              <div class="product-stage flex aspect-square items-center justify-center overflow-hidden rounded-[var(--radius)] border border-glass-border/50">
                 <Image
                   src={system.image}
                   alt={`Foresta ${system.name} unit`}
                   widths={[480, 720, 960]}
                   sizes="(min-width: 1024px) 40vw, 90vw"
+      fit="contain"
                   class="h-full w-full object-contain p-8"
                 />
               </div>
@@ -140,12 +141,13 @@ const specGroups = [
   <section class="border-t border-border/50 py-16 md:py-24">
     <div class="container-page">
       <div class="grid items-center gap-10 md:grid-cols-2 md:gap-14">
-        <div class="overflow-hidden rounded-[var(--radius)] bg-forest-deep/60" data-reveal>
+        <div class="product-stage flex aspect-4/3 items-center justify-center overflow-hidden rounded-[var(--radius)] border border-glass-border/50" data-reveal>
           <Image
             src={ctrxAd}
             alt="Foresta CTRX unit configured with advertising display panels"
             widths={[480, 720, 960]}
             sizes="(min-width: 768px) 45vw, 90vw"
+      fit="contain"
             class="h-full w-full object-contain p-8"
           />
         </div>
